@@ -35,6 +35,7 @@ class DatastoreServiceProvider extends ServiceProvider
     protected $stores = [
         'LibreNMS\Data\Store\Graphite',
         'LibreNMS\Data\Store\InfluxDB',
+        'LibreNMS\Data\Store\InfluxDB2',
         'LibreNMS\Data\Store\OpenTSDB',
         'LibreNMS\Data\Store\Prometheus',
         'LibreNMS\Data\Store\Rrd',
@@ -62,12 +63,21 @@ class DatastoreServiceProvider extends ServiceProvider
 
         // additional bindings
         $this->registerInflux();
+        $this->registerInflux2();
     }
 
     public function registerInflux()
     {
         $this->app->singleton('InfluxDB\Database', function ($app) {
             return \LibreNMS\Data\Store\InfluxDB::createFromConfig();
+        });
+    }
+
+    public function registerInflux2()
+    {
+        #RH - Not really sure what this does and if it can co-exist with the original InfluxDB
+        $this->app->singleton('InfluxDB2\Database', function ($app) {
+            return \LibreNMS\Data\Store\InfluxDB2::createFromConfig();
         });
     }
 }

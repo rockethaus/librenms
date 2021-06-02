@@ -95,6 +95,7 @@ class ModuleTestHelper
         Config::set('rrd.enable', false);
         Config::set('hide_rrd_disabled', true);
         Config::set('influxdb.enable', false);
+        Config::set('influxdb2.enable', false);
         Config::set('graphite.enable', false);
         Config::set('prometheus.enable', false);
 
