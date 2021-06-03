@@ -33,22 +33,26 @@ use Log;
 class InfluxDB2 extends BaseDatastore
 {
     /** @var \InfluxDB2\Database */
-    private $connection;
+    //private $connection;
+    private $write_api;
 
-    public function __construct(\InfluxDB2\Database $influx)
+    /* RH-commenting out this constructor as I don't think we need it */
+    public function __construct(\InfluxDB2\WriteApi $influx)
     {
         parent::__construct();
-        $this->connection = $influx;
+        //$this->connection = $influx;
+        $this->write_api = $influx;
 
         #RH Need to figure out where this is called from and likely eliminate it, you can't get a token unless you already have a bucket
         #KP This is called automatically by the "new InfluxDB2" line inside of createFromConfig()
         // check if the connection is healthy
-        try {
+        /*try {
             $influx->health();
         } catch (\Exception $e) {
             Log::warning('InfluxDB2: Health check failed.');
-        }
+        }*/
     }
+    
 
     public function getName()
     {
@@ -80,6 +84,7 @@ class InfluxDB2 extends BaseDatastore
         $stat = Measurement::start('write');
         $tmp_fields = [];
         $tmp_tags['hostname'] = $device['hostname'];
+        //Log::error('InfluxDB2.php: HOSTNAME detected as: ' . $tmp_tags['hostname']);
         foreach ($tags as $k => $v) {
             if (empty($v)) {
                 $v = '_blank_';
@@ -109,15 +114,28 @@ class InfluxDB2 extends BaseDatastore
         ]);
 
         try {
-            $point = InfluxDB2\Point::measurement($measurement)
-                    ->appendTags($tmp_tags)
-                    ->appendFields($tmp_fields);
+            /*
+            $point = ['name' => $measurement,
+                'tags' => $tmp_tags,
+                'fields' => $tmp_fields
+            ];
+            */
+            
+            $point = \InfluxDB2\Point::measurement($measurement);
+            foreach ($tmp_tags as $k => $v) {
+                Log::debug('InfluxDB2.php: Adding tag with values ' . $k . ', ' . $v . ' to point with name ' . $measurement);
+                $point->addTag($k, $v);
+            }
+            foreach ($tmp_fields as $k => $v) {
+                Log::debug('InfluxDB2.php: Adding field with values ' . $k . ', ' . $v . ' to point with name ' . $measurement);
+                $point->addField($k, $v);
+            }
 
-            $this->writeApi->write($point);
+            Log::debug('InfluxDB2.php: Attempting to write to API point with name ' . $measurement);
+            $this->write_api->write($point);
             #RH - Not sure what the next line does.  I'm guessing it writes to the Libre base datastore...
             $this->recordStatistic($stat->end());
         } catch (\InfluxDB2\Exception $e) {
-            #RH - this error catch needs to be verfied for v2
             Log::error('InfluxDB2 exception: ' . $e->getMessage());
             Log::debug($e->getTraceAsString());
         }
@@ -130,6 +148,9 @@ class InfluxDB2 extends BaseDatastore
      */
     public static function createFromConfig()
     {
+
+        Log::debug('InfluxDB2.php: Entering createFromConfig ');
+
         $url = Config::get('influxdb2.url', 'http://localhost:8086');
         $transport = Config::get('influxdb2.transport', 'http');
         $token = Config::get('influxdb2.token', '');
@@ -144,46 +165,46 @@ class InfluxDB2 extends BaseDatastore
         $udp_host = Config::get('influxdb2.udpHost', '');
         $udp_port = Config::get('influxdb2.udpPort', '');
 
-        
-
         if ($transport == 'udp') {
 
-            $client = new InfluxDB2\Client([
+            $client = new \InfluxDB2\Client([
                 "udpHost" => $udp_host,
                 "udpPort" => $udp_port,
                 "token" => $token,
                 "bucket" => $bucket,
                 "org" => $org,
-                "precision" => WritePrecision::S
+                "precision" => \InfluxDB2\Model\WritePrecision::S
             ]);
             
-            $writeApi = $client->createUdpWriter();
+            $write_api = $client->createUdpWriter();
 
             #RH - I'm not sure if the below is going to work.  Can the UDP writer support the point format?
             # If it can't, we're going to need to put a bunch more logic in the data writer
-            if(!empty($tag01_name) && !empty($tag01_value)) $writeApi->pointSettings->addDefaultTag($tag01_name, $tag01_value);
-            if(!empty($tag02_name) && !empty($tag02_value)) $writeApi->pointSettings->addDefaultTag($tag02_name, $tag02_value);
+            if(!empty($tag01_name) && !empty($tag01_value)) $write_api->pointSettings->addDefaultTag($tag01_name, $tag01_value);
+            if(!empty($tag02_name) && !empty($tag02_value)) $write_api->pointSettings->addDefaultTag($tag02_name, $tag02_value);
 
         } else {
 
-            $client = new InfluxDB2\Client([
+            $client = new \InfluxDB2\Client([
                 "url" => $url,
                 "token" => $token,
                 "bucket" => $bucket,
                 "org" => $org,
-                "precision" => WritePrecision::S,
+                "precision" => \InfluxDB2\Model\WritePrecision::S,
                 "timeout" => $timeout,
                 "verifySSL" => $verify_ssl
             ]);
 
-            $writeApi = $client->createWriteApi();
-            if(!empty($tag01_name) && !empty($tag01_value)) $writeApi->pointSettings->addDefaultTag($tag01_name, $tag01_value);
-            if(!empty($tag02_name) && !empty($tag02_value)) $writeApi->pointSettings->addDefaultTag($tag02_name, $tag02_value);
+            //Log::info('InfluxDB2.php: InfluxDB HEALTH CHECK result: ' . $client->health());
+            $write_api = $client->createWriteApi();
+            if(!empty($tag01_name) && !empty($tag01_value)) $write_api->pointSettings->addDefaultTag($tag01_name, $tag01_value);
+            if(!empty($tag02_name) && !empty($tag02_value)) $write_api->pointSettings->addDefaultTag($tag02_name, $tag02_value);
         }
 
         #RH - Not entirely sure what the return here does.  Is it needed?  I'm guessing that this was essentially a connection verification, 
         # maybe we just need the health check and a catch if it fails
-        return $client->selectDB($db);
+        //return $client->selectDB($db);
+        return $write_api;
     }
 
     private function forceType($data)
