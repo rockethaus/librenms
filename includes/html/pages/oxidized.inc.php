@@ -30,7 +30,7 @@ $pagetitle[] = 'Oxidized';
                             <tr>
                                 <th data-column-id="id" data-visible="false">ID</th>
                                 <th data-column-id="hostname" data-formatter="hostname" data-order="asc">Hostname</th>
-                                <th data-column-id="sysname" data-visible=" <?php echo ! Config::get('force_ip_to_sysname') ? 'true' : 'false' ?>">SysName</th>
+                                <th data-column-id="sysname" data-visible="false">SysName</th>
                                 <th data-column-id="last_status" data-formatter="status">Last Status</th>
                                 <th data-column-id="last_update">Last Update</th>
                                 <th data-column-id="model">Model</th>
@@ -82,7 +82,7 @@ $pagetitle[] = 'Oxidized';
         formatters: {
             "hostname": function(column, row) {
                 if (row.id) {
-                    return '<a href="/device/device=' + row.id + '">' + row.hostname + '</a>';
+                    return '<a href="<?= url('device') ?>/' + row.id + '">' + row.hostname + '</a>';
                 } else {
                     return row.hostname;
                 }
@@ -92,7 +92,7 @@ $pagetitle[] = 'Oxidized';
                     return '<button class="btn btn-default btn-sm" name="btn-refresh-node-devId' + row.id +
                             '" id="btn-refresh-node-devId' + row.id + '" onclick="refresh_oxidized_node(\'' + row.hostname + '\');" title="Refetch config">' +
                             '<i class="fa fa-refresh"></i></button> ' +
-                            '<a href="device/device=' + row.id + '/tab=showconfig/" title="View config"><i class="fa fa-align-justify fa-lg icon-theme"></i></a>';
+                            '<a href="<?= url('device') ?>/' + row.id + '/tab=showconfig/" title="View config"><i class="fa fa-align-justify fa-lg icon-theme"></i></a>';
                 }
             },
             "status": function(column, row) {
@@ -121,7 +121,7 @@ $pagetitle[] = 'Oxidized';
                     $('#search-output').append('<p>Config appears on the following device(s):</p>');
                     $.each(data.output, function (row, value) {
                         if (value['dev_id']) {
-                            $('#search-output').append('<p><a href="device/device=' + value['dev_id'] + '/tab=showconfig/">' + value['full_name'] + '</p>');
+                            $('#search-output').append('<p><a href="<?= url('device') ?>/' + value['dev_id'] + '/tab=showconfig/">' + value['full_name'] + '</p>');
                         } else {
                             $('#search-output').append('<p>' + value['full_name'] + '</p>');
                         }

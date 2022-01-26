@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  * @link       https://www.librenms.org
+ *
  * @copyright  2019 Tony Murray
  * @author     Tony Murray <murraytony@gmail.com>
  */
@@ -58,7 +59,7 @@ class DynamicConfigItem implements \ArrayAccess
     /**
      * Check given value is valid. Using the type of this config item and possibly other variables.
      *
-     * @param mixed $value
+     * @param  mixed  $value
      * @return bool|mixed
      */
     public function checkValue($value)
@@ -69,6 +70,8 @@ class DynamicConfigItem implements \ArrayAccess
             return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) !== null;
         } elseif ($this->type == 'integer') {
             return (! is_bool($value) && filter_var($value, FILTER_VALIDATE_INT)) || $value === '0' || $value === 0;
+        } elseif ($this->type == 'float') {
+            return filter_var($value, FILTER_VALIDATE_FLOAT) !== false;
         } elseif ($this->type == 'select') {
             return in_array($value, array_keys($this->options));
         } elseif ($this->type == 'email') {
@@ -193,7 +196,7 @@ class DynamicConfigItem implements \ArrayAccess
     }
 
     /**
-     * @param mixed $value The value that was validated
+     * @param  mixed  $value  The value that was validated
      * @return string
      */
     public function getValidationMessage($value)

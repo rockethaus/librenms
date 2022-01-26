@@ -19,68 +19,68 @@ return [
     ],
     'sections' => [
         'alerting' => [
-            'general' => 'General Alert Settings',
-            'email' => 'Email Options',
-            'rules' => 'Alert Rule Default Settings',
+            'general' => ['name' => 'General Alert Settings'],
+            'email' => ['name' => 'Email Options'],
+            'rules' => ['name' => 'Alert Rule Default Settings'],
         ],
         'api' => [
-            'cors' => 'CORS',
+            'cors' => ['name' => 'CORS'],
         ],
         'auth' => [
-            'general' => 'General Authentication Settings',
-            'ad' => 'Active Directory Settings',
-            'ldap' => 'LDAP Settings',
+            'general' => ['name' => 'General Authentication Settings'],
+            'ad' => ['name' => 'Active Directory Settings'],
+            'ldap' => ['name' => 'LDAP Settings'],
         ],
         'authorization' => [
-            'device-group' => 'Device Group Settings',
+            'device-group' => ['name' => 'Device Group Settings'],
         ],
         'discovery' => [
-            'general' => 'General Discovery Settings',
-            'route' => 'Routes Discovery Module',
-            'discovery_modules' => 'Discovery Modules',
-            'storage' => 'Storage Module',
-            'networks' => 'Networks',
+            'general' => ['name' => 'General Discovery Settings'],
+            'route' => ['name' => 'Routes Discovery Module'],
+            'discovery_modules' => ['name' => 'Discovery Modules'],
+            'storage' => ['name' => 'Storage Module'],
+            'networks' => ['name' => 'Networks'],
         ],
         'external' => [
-            'binaries' => 'Binary Locations',
-            'location' => 'Location Settings',
-            'graylog' => 'Graylog Integration',
-            'oxidized' => 'Oxidized Integration',
-            'mac_oui' => 'Mac OUI Lookup Integration',
-            'peeringdb' => 'PeeringDB Integration',
-            'nfsen' => 'NfSen Integration',
-            'unix-agent' => 'Unix-Agent Integration',
-            'smokeping' => 'Smokeping Integration',
-            'snmptrapd' => 'SNMP Traps Integration',
+            'binaries' => ['name' => 'Binary Locations'],
+            'location' => ['name' => 'Location Settings'],
+            'graylog' => ['name' => 'Graylog Integration'],
+            'oxidized' => ['name' => 'Oxidized Integration'],
+            'mac_oui' => ['name' => 'Mac OUI Lookup Integration'],
+            'peeringdb' => ['name' => 'PeeringDB Integration'],
+            'nfsen' => ['name' => 'NfSen Integration'],
+            'unix-agent' => ['name' => 'Unix-Agent Integration'],
+            'smokeping' => ['name' => 'Smokeping Integration'],
+            'snmptrapd' => ['name' => 'SNMP Traps Integration'],
         ],
         'poller' => [
-            'availability' => 'Device Availability',
-            'distributed' => 'Distributed Poller',
-            'graphite' => 'Datastore: Graphite',
-            'influxdb' => 'Datastore: InfluxDB',
-            'opentsdb' => 'Datastore: OpenTSDB',
-            'ping' => 'Ping',
-            'prometheus' => 'Datastore: Prometheus',
-            'rrdtool' => 'Datastore: RRDTool',
-            'snmp' => 'SNMP',
-            'poller_modules' => 'Poller Modules',
-            'interface_types' => 'Interface Type by RFC 7224',
+            'availability' => ['name' => 'Device Availability'],
+            'distributed' => ['name' => 'Distributed Poller'],
+            'graphite' => ['name' => 'Datastore: Graphite'],
+            'influxdb' => ['name' => 'Datastore: InfluxDB'],
+            'opentsdb' => ['name' => 'Datastore: OpenTSDB'],
+            'ping' => ['name' => 'Ping'],
+            'prometheus' => ['name' => 'Datastore: Prometheus'],
+            'rrdtool' => ['name' => 'Datastore: RRDTool'],
+            'snmp' => ['name' => 'SNMP'],
+            'poller_modules' => ['name' => 'Poller Modules'],
+            'interface_types' => ['name' => 'Interface Type by RFC 7224'],
         ],
         'system' => [
-            'cleanup' => 'Cleanup',
-            'proxy' => 'Proxy',
-            'updates' => 'Updates',
-            'server' => 'Server',
+            'cleanup' => ['name' => 'Cleanup'],
+            'proxy' => ['name' => 'Proxy'],
+            'updates' => ['name' => 'Updates'],
+            'server' => ['name' => 'Server'],
         ],
         'webui' => [
-            'availability-map' => 'Availability Map Settings',
-            'graph' => 'Graph Settings',
-            'dashboard' => 'Dashboard Settings',
-            'port-descr' => 'Interface Description Parsing',
-            'search' => 'Search Settings',
-            'style' => 'Style',
-            'device' => 'Device Settings',
-            'worldmap' => 'World Map Settings',
+            'availability-map' => ['name' => 'Availability Map Settings'],
+            'graph' => ['name' => 'Graph Settings'],
+            'dashboard' => ['name' => 'Dashboard Settings'],
+            'port-descr' => ['name' => 'Interface Description Parsing'],
+            'search' => ['name' => 'Search Settings'],
+            'style' => ['name' => 'Style'],
+            'device' => ['name' => 'Device Settings'],
+            'worldmap' => ['name' => 'World Map Settings'],
         ],
     ],
     'settings' => [
@@ -187,6 +187,10 @@ return [
         'alert_log_purge' => [
             'description' => 'Alert log entries older than',
             'help' => 'Cleanup done by daily.sh',
+        ],
+        'discovery_on_reboot' => [
+            'description' => 'Discovery on Reboot',
+            'help' => 'Do a Discovery on a rebooted Device',
         ],
         'allow_duplicate_sysName' => [
             'description' => 'Allow Duplicate sysName',
@@ -414,7 +418,7 @@ return [
             'help' => 'Number of days to keep a user logged in when checking the remember me checkbox at log in.',
         ],
         'authlog_purge' => [
-            'description' => 'Auth log entries older than (days)',
+            'description' => 'Auth log entries older than',
             'help' => 'Cleanup done by daily.sh',
         ],
         'peering_descr' => [
@@ -438,7 +442,7 @@ return [
             'help' => 'This should *only* be set if you want to *force* a particular hostname/port. It will prevent the web interface being usable form any other hostname',
         ],
         'device_perf_purge' => [
-            'description' => 'Device performance entries older than (days)',
+            'description' => 'Device performance entries older than',
             'help' => 'Cleanup done by daily.sh',
         ],
         'discovery_modules' => [
@@ -498,6 +502,9 @@ return [
             ],
             'ipv6-addresses' => [
                 'description' => 'IPv6 Addresses',
+            ],
+            'isis' => [
+                'description' => 'ISIS',
             ],
             'junose-atm-vp' => [
                 'description' => 'Junose ATM VP',
@@ -643,7 +650,7 @@ return [
             'help' => 'Name used as part of the from address',
         ],
         'eventlog_purge' => [
-            'description' => 'Event log entries older than (days)',
+            'description' => 'Event log entries older than',
             'help' => 'Cleanup done by daily.sh',
         ],
         'favicon' => [
@@ -719,6 +726,12 @@ return [
             'availability_consider_maintenance' => [
                 'description' => 'Scheduled maintenance does not affect availability',
                 'help' => 'Disables the creation of outages and decreasing of availability for devices which are in maintenance mode.',
+            ],
+        ],
+        'graphs' => [
+            'port_speed_zoom' => [
+                'description' => 'Zoom port graphs to port speed',
+                'help' => 'Zoom port graphs so the max is always the port speed, disabled port graphs zoom to traffic',
             ],
         ],
         'graylog' => [
@@ -937,6 +950,10 @@ return [
             'default_group' => [
                 'description' => 'Set the default group returned',
             ],
+            'ignore_groups' => [
+                'description' => 'Do not backup these Oxidized groups',
+                'help' => 'Groups (set via Variable Mapping) excluded from being sent to Oxidized',
+            ],
             'enabled' => [
                 'description' => 'Enable Oxidized support',
             ],
@@ -995,6 +1012,10 @@ return [
         'ping' => [
             'description' => 'Path to ping',
         ],
+        'ping_rrd_step' => [
+            'description' => 'Ping Frequency',
+            'help' => 'How often to check. Sets the default value for all nodes. Warning! If you change this you must make additional changes.  Check the Fast Ping docs.',
+        ],
         'poller_modules' => [
             'unix-agent' => [
                 'description' => 'Unix Agent',
@@ -1052,6 +1073,9 @@ return [
             ],
             'ospf' => [
                 'description' => 'OSPF',
+            ],
+            'isis' => [
+                'description' => 'ISIS',
             ],
             'cisco-ipsec-flow-monitor' => [
                 'description' => 'Cisco IPSec flow Monitor',
@@ -1140,7 +1164,7 @@ return [
             'help' => 'Cleanup done by daily.sh',
         ],
         'ports_purge' => [
-            'description' => 'Ports older than (days)',
+            'description' => 'Ports older than',
             'help' => 'Cleanup done by daily.sh',
         ],
         'prometheus' => [
@@ -1160,6 +1184,10 @@ return [
                 'description' => 'Attach Device sysName',
                 'help' => 'Attach sysName information put to Prometheus.',
             ],
+            'prefix' => [
+                'description' => 'Prefix',
+                'help' => 'Optional text to prepend to exported metric names',
+            ],
         ],
         'public_status' => [
             'description' => 'Show status publicly',
@@ -1168,6 +1196,10 @@ return [
         'routes_max_number' => [
             'description' => 'Max number of routes allowed for discovery',
             'help' => 'No route will be discovered if the size of the routing table is bigger than this number',
+        ],
+        'default_port_group' => [
+            'description' => 'Default Port Group',
+            'help' => 'New discovered Ports will be assigned to this port Group.',
         ],
         'nets' => [
             'description' => 'Autodiscovery Networks',
@@ -1180,7 +1212,7 @@ return [
             ],
         ],
         'route_purge' => [
-            'description' => 'Route entries older than (days)',
+            'description' => 'Route entries older than',
             'help' => 'Cleanup done by daily.sh',
         ],
         'rrd' => [
@@ -1196,7 +1228,7 @@ return [
             'help' => 'Location of rrd files.  Default is rrd inside the LibreNMS directory.  Changing this setting does not move the rrd files.',
         ],
         'rrd_purge' => [
-            'description' => 'RRD Files entries older than (days)',
+            'description' => 'RRD Files entries older than',
             'help' => 'Cleanup done by daily.sh',
         ],
         'rrd_rra' => [
@@ -1213,6 +1245,94 @@ return [
         'rrdtool_tune' => [
             'description' => 'Tune all rrd port files to use max values',
             'help' => 'Auto tune maximum value for rrd port files',
+        ],
+        'rrdtool_version' => [
+            'description' => 'Sets the version of rrdtool on your server',
+            'help' => 'Anything over 1.5.5 supports all features LibreNMS uses, do not set higher than your installed version',
+        ],
+        'service_poller_enabled' => [
+            'description' => 'Enable Polling',
+            'help' => 'Enable poller workers. Sets the default value for all nodes.',
+        ],
+        'service_poller_workers' => [
+            'description' => 'Poller Workers',
+            'help' => 'Amount of poller workers to spawn. Sets the default value for all nodes.',
+        ],
+        'service_poller_frequency' => [
+            'description' => 'Poller Frequency (Warning!)',
+            'help' => 'How often to poll devices. Sets the default value for all nodes. Warning! Changing this without fixing rrd files will break graphs. See docs for more info.',
+        ],
+        'service_poller_down_retry' => [
+            'description' => 'Device Down Retry',
+            'help' => 'If a device is down when polling is attempted. This is the amount of time to wait before retrying. Sets the default value for all nodes.',
+        ],
+        'service_discovery_enabled' => [
+            'description' => 'Discovery Enabled',
+            'help' => 'Enable discovery workers. Sets the default value for all nodes.',
+        ],
+        'service_discovery_workers' => [
+            'description' => 'Discovery Workers',
+            'help' => 'Amount of discovery workers to run. Setting too high can cause overload. Sets the default value for all nodes.',
+        ],
+        'service_discovery_frequency' => [
+            'description' => 'Discovery Frequency',
+            'help' => 'How often to run device discovery. Sets the default value for all nodes. Default is 4 times a day.',
+        ],
+        'service_services_enabled' => [
+            'description' => 'Services Enabled',
+            'help' => 'Enable services workers. Sets the default value for all nodes.',
+        ],
+        'service_services_workers' => [
+            'description' => 'Services Workers',
+            'help' => 'Amount of services workers. Sets the default value for all nodes.',
+        ],
+        'service_services_frequency' => [
+            'description' => 'Services Frequency',
+            'help' => 'How often to run services. This should match poller frequency. Sets the default value for all nodes.',
+        ],
+        'service_billing_enabled' => [
+            'description' => 'Billing Enabled',
+            'help' => 'Enable billing workers. Sets the default value for all nodes.',
+        ],
+        'service_billing_frequency' => [
+            'description' => 'Billing Frequency',
+            'help' => 'How often to collect billing data. Sets the default value for all nodes.',
+        ],
+        'service_billing_calculate_frequency' => [
+            'description' => 'Billing Calculate Frequency',
+            'help' => 'How often to calculate bill usage. Sets the default value for all nodes.',
+        ],
+        'service_alerting_enabled' => [
+            'description' => 'Alerting Enabled',
+            'help' => 'Enable the alerting worker. Sets the default value for all nodes.',
+        ],
+        'service_alerting_frequency' => [
+            'description' => 'Alerting Frequency',
+            'help' => 'How often alert rules are checked. Note that data is only updated based on poller frequency. Sets the default value for all nodes.',
+        ],
+        'service_ping_enabled' => [
+            'description' => 'Fast Ping Enabled',
+            'help' => 'Fast Ping just pings devices to check if they are up or down. Sets the default value for all nodes.',
+        ],
+        'service_update_enabled' => [
+            'description' => 'Daily Maintenance Enabled',
+            'help' => 'Run daily.sh maintenance script and restart the dispatcher service afterwards. Sets the default value for all nodes.',
+        ],
+        'service_update_frequency' => [
+            'description' => 'Maintenance Frequency',
+            'help' => 'How often to run daily maintenance. Default is 1 Day. It is highly suggested not to change this. Sets the default value for all nodes.',
+        ],
+        'service_loglevel' => [
+            'description' => 'Log Level',
+            'help' => 'Log level of the dispatch service. Sets the default value for all nodes.',
+        ],
+        'service_watchdog_enabled' => [
+            'description' => 'Watchdog Enabled',
+            'help' => 'Watchdog monitors the log file and restarts the service it it has not been updated. Sets the default value for all nodes.',
+        ],
+        'service_watchdog_log' => [
+            'description' => 'Log File to Watch',
+            'help' => 'Default is the LibreNMS log file. Sets the default value for all nodes.',
         ],
         'sfdp' => [
             'description' => 'Path to sfdp',
@@ -1246,6 +1366,12 @@ return [
             'max_repeaters' => [
                 'description' => 'Max Repeaters',
                 'help' => 'Set repeaters to use for SNMP bulk requests',
+            ],
+            'oids' => [
+                'no_bulk' => [
+                    'description' => 'Disable snmp bulk for OIDs',
+                    'help' => 'Disable snmp bulk operation for certain OIDs. Generally, this should be set on an OS instead. Format should be MIB::OID',
+                ],
             ],
             'port' => [
                 'description' => 'Port',
@@ -1308,7 +1434,7 @@ return [
             'description' => 'Filter syslog messages containing',
         ],
         'syslog_purge' => [
-            'description' => 'Syslog entries older than (days)',
+            'description' => 'Syslog entries older than',
             'help' => 'Cleanup done by daily.sh',
         ],
         'title_image' => [
@@ -1320,6 +1446,14 @@ return [
         ],
         'traceroute6' => [
             'description' => 'Path to traceroute6',
+        ],
+        'twofactor' => [
+            'description' => 'Two-Factor',
+            'help' => 'Allow users to activate and use Timebased (TOTP) or Counterbased (HOTP) One-Time Passwords (OTP)',
+        ],
+        'twofactor_lock' => [
+            'description' => 'Two-Factor Throttle Time (seconds)',
+            'help' => 'Lock-out time to wait in seconds before allowing further attempts if Two-Factor authentication is failed 3 times consecutively - will prompt user to wait this long.  Set to 0 to disable resulting in a permanent account lock-out and a message to user to contact administrator',
         ],
         'unix-agent' => [
             'connection-timeout' => [
@@ -1396,17 +1530,19 @@ return [
                 'help' => 'Minimum Graph Height (default: 300)',
             ],
         ],
+        'device_display_default' => [
+            'description' => 'Default device display name template',
+            'help' => 'Sets the default display name for all devices (can be overridden per-device).  Hostname/IP: Just show the hostname or IP the device was added with. sysName: Just show the sysName from snmp. Hostname or sysName: Show hostname, but if it is an IP, show sysName.',
+            'options' => [
+                'hostname' => 'Hostname / IP',
+                'sysName_fallback' => 'Hostname, fallback to sysName for IPs',
+                'sysName' => 'sysName',
+                'ip' => 'IP (from hostname IP or resolved)',
+            ],
+        ],
         'device_location_map_open' => [
             'description' => 'Location Map open',
             'help' => 'Location Map is shown by default',
-        ],
-        'force_hostname_to_sysname' => [
-            'description' => 'show SysName instead of Hostname',
-            'help' => 'When using a dynamic DNS hostname or one that does not resolve, this option would allow you to make use of the sysName instead as the preferred reference to the device',
-        ],
-        'force_ip_to_sysname' => [
-            'description' => 'show SysName instead of IP Address',
-            'help' => 'When using IP addresses as a hostname you can instead represent the devices on the WebUI by its sysName resulting in an easier to read overview of your network. This would apply on networks where you don\'t have DNS records for most of your devices',
         ],
         'whois' => [
             'description' => 'Path to whois',

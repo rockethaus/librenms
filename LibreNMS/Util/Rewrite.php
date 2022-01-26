@@ -18,6 +18,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  * @link       https://www.librenms.org
+ *
  * @copyright  2018 Tony Murray
  * @author     Tony Murray <murraytony@gmail.com>
  */
@@ -138,7 +139,7 @@ class Rewrite
     /**
      * Reformat a mac stored in the DB (only hex) to a nice readable format
      *
-     * @param string $mac
+     * @param  string  $mac
      * @return string
      */
     public static function readableMac($mac)
@@ -149,14 +150,18 @@ class Rewrite
     /**
      * Extract the OUI and match it against cached values
      *
-     * @param string $mac
+     * @param  string  $mac
      * @return string
      */
     public static function readableOUI($mac)
     {
-        $key = 'OUIDB-' . (substr($mac, 0, 6));
+        $cached = Cache::get('OUIDB-' . (substr($mac, 0, 6)), '');
+        if ($cached == 'IEEE Registration Authority') {
+            // Then we may have a shorter prefix, so let's try them one ater the other, ordered by probability
+            return Cache::get('OUIDB-' . substr($mac, 0, 9)) ?: Cache::get('OUIDB-' . substr($mac, 0, 7));
+        }
 
-        return Cache::get($key, '');
+        return $cached;
     }
 
     /**
@@ -167,7 +172,7 @@ class Rewrite
      * 00:02:04:0B:0D:0F becomes 0.2.4.11.13.239
      * 0:2:4:B:D:F       becomes 0.2.4.11.13.15
      *
-     * @param string $mac
+     * @param  string  $mac
      * @return string oid representation of a MAC address
      */
     public static function oidMac($mac)
@@ -188,7 +193,7 @@ class Rewrite
      * 00:02:04:0B:0D:0F becomes 0002040B0D0F
      * 0:2:4:B:D:F       becomes 0002040B0D0F
      *
-     * @param string $mac hexadecimal MAC address with or without common delimiters
+     * @param  string  $mac  hexadecimal MAC address with or without common delimiters
      * @return string undelimited hexadecimal MAC address
      */
     public static function macToHex($mac)
@@ -202,8 +207,8 @@ class Rewrite
     /**
      * Make Cisco hardware human readable
      *
-     * @param Device $device
-     * @param bool $short
+     * @param  Device  $device
+     * @param  bool  $short
      * @return string
      */
     public static function ciscoHardware(&$device, $short = false)
@@ -446,5 +451,16 @@ class Rewrite
     public static function zeropad($num, $length = 2)
     {
         return str_pad($num, $length, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * If given input is an IPv6 address, wrap it in [] for use in applications that require it
+     *
+     * @param  string  $ip
+     * @return string|null
+     */
+    public static function addIpv6Brackets($ip): ?string
+    {
+        return IPv6::isValid($ip) ? "[$ip]" : $ip;
     }
 }

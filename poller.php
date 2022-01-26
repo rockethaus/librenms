@@ -24,6 +24,8 @@
  * @author Heath Barnhart <hbarnhart@kanren.net>
  */
 
+use App\Action;
+use App\Actions\Device\UpdateDeviceGroupsAction;
 use LibreNMS\Alert\AlertRules;
 use LibreNMS\Config;
 use LibreNMS\Data\Store\Datastore;
@@ -33,6 +35,7 @@ $init_modules = ['polling', 'alerts', 'laravel'];
 require __DIR__ . '/includes/init.php';
 
 $poller_start = microtime(true);
+Log::setDefaultDriver('console');
 echo Config::get('project_name') . " Poller\n";
 
 $options = getopt('h:m:i:n:r::d::v::a::f::q');
@@ -131,11 +134,6 @@ if (! isset($query)) {
 
 foreach (dbFetch($query) as $device) {
     DeviceCache::setPrimary($device['device_id']);
-    if ($device['os_group'] == 'cisco') {
-        $device['vrf_lite_cisco'] = dbFetchRows('SELECT * FROM `vrf_lite_cisco` WHERE `device_id` = ' . $device['device_id']);
-    } else {
-        $device['vrf_lite_cisco'] = '';
-    }
 
     if (! poll_device($device, $module_override)) {
         $unreachable_devices++;
@@ -144,7 +142,7 @@ foreach (dbFetch($query) as $device) {
     // Update device_groups
     echo "### Start Device Groups ###\n";
     $dg_start = microtime(true);
-    $group_changes = \App\Models\DeviceGroup::updateGroupsFor($device['device_id']);
+    $group_changes = Action::execute(UpdateDeviceGroupsAction::class);
     d_echo('Groups Added: ' . implode(',', $group_changes['attached']) . PHP_EOL);
     d_echo('Groups Removed: ' . implode(',', $group_changes['detached']) . PHP_EOL);
     echo '### End Device Groups, runtime: ' . round(microtime(true) - $dg_start, 4) . "s ### \n\n";
@@ -164,7 +162,8 @@ $string = $argv[0] . " $doing " . date(Config::get('dateformat.compact')) . " - 
 d_echo("$string\n");
 
 if (! isset($options['q'])) {
-    printStats();
+    echo PHP_EOL;
+    app(\App\Polling\Measure\MeasurementManager::class)->printStats();
 }
 
 logfile($string);

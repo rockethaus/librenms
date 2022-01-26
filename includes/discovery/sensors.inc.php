@@ -8,7 +8,7 @@ $valid['sensor'] = [];
 /** @var OS $os */
 $pre_cache = $os->preCache();
 
-if ($device['os'] == 'rittal-cmc-iii-pu') {
+if ($device['os'] == 'rittal-cmc-iii-pu' || $device['os'] == 'rittal-lcp') {
     include 'includes/discovery/sensors/rittal-cmc-iii-sensors.inc.php';
 } else {
     // Run custom sensors
@@ -23,6 +23,10 @@ if ($device['os'] == 'netscaler') {
 
 if ($device['os'] == 'openbsd') {
     include 'includes/discovery/sensors/openbsd.inc.php';
+}
+
+if ($device['os'] == 'linux') {
+    include 'includes/discovery/sensors/rpigpiomonitor.inc.php';
 }
 
 if (strstr($device['hardware'], 'Dell')) {
@@ -64,6 +68,7 @@ $run_sensors = [
     'count',
     'temperature',
     'tv_signal',
+    'bitrate',
     'voltage',
     'snr',
     'pressure',
@@ -80,7 +85,7 @@ $run_sensors = [
 // filter submodules
 $run_sensors = array_intersect($run_sensors, Config::get('discovery_submodules.sensors', $run_sensors));
 
-sensors($run_sensors, $device, $valid, $pre_cache);
+sensors($run_sensors, $os, $valid, $pre_cache);
 unset(
     $pre_cache,
     $run_sensors,

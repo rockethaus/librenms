@@ -230,6 +230,9 @@
                                                     "string"
                                                 ]
                                             },
+                                            "user_func": {
+                                                "type": "string"
+                                            },
                                             "states": {
                                                 "type": "array",
                                                 "items": {
@@ -268,6 +271,9 @@
                                                     "string",
                                                     "array"
                                                 ]
+                                            },
+                                            "snmp_bulk": {
+                                                "type": "boolean"
                                             },
                                             "entPhysicalIndex": {
                                                 "type": ["integer", "string"]
@@ -433,7 +439,7 @@
                                     "array"
                                 ]
                             },
-                            "nobulk": {
+                            "snmp_bulk": {
                                 "type": "boolean"
                             },
                             "entPhysicalIndex": {

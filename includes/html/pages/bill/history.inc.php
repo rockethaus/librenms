@@ -55,6 +55,8 @@ echo '<table class="table table-striped">
         <th>Allowed</th>
         <th>Inbound</th>
         <th>Outbound</th>
+        <th>Peak Out</th>
+        <th>Peak In</th>
         <th>Total</th>
         <th>95th %ile</th>
         <th style="text-align: center;">Overusage</th>
@@ -76,7 +78,7 @@ foreach (dbFetchRows('SELECT * FROM `bill_history` WHERE `bill_id` = ? ORDER BY 
         $rate_95th = Number::formatSi($history['rate_95th'], 2, 3, 'bps');
         $total_data = Number::formatBase($history['traf_total'], \LibreNMS\Config::get('billing.base'), 2, 3, '');
 
-        $background = \LibreNMS\Util\Colors::percentage($percent, null);
+        $background = \LibreNMS\Util\Color::percentage($percent, null);
 
         if ($type == 'CDR') {
             $allowed = Number::formatSi($history['bill_allowed'], 2, 3, 'bps');
@@ -91,6 +93,8 @@ foreach (dbFetchRows('SELECT * FROM `bill_history` WHERE `bill_id` = ? ORDER BY 
             $out = Number::formatBase($history['traf_out'], \LibreNMS\Config::get('billing.base'), 2, 3, '');
             $overuse = (($history['bill_overuse'] <= 0) ? '-' : '<span style="color: #' . $background['left'] . '; font-weight: bold;">' . Number::formatBase($history['bill_overuse'], \LibreNMS\Config::get('billing.base')) . '</span>');
         }
+        $peakOut = Number::formatBase($history['bill_peak_out'], \LibreNMS\Config::get('billing.base'), 2, 3, '');
+        $peakIn = Number::formatBase($history['bill_peak_in'], \LibreNMS\Config::get('billing.base'), 2, 3, '');
 
         $total_data = (($type == 'Quota') ? '<b>' . $total_data . '</b>' : $total_data);
         $rate_95th = (($type == 'CDR') ? '<b>' . $rate_95th . '</b>' : $rate_95th);
@@ -105,6 +109,8 @@ foreach (dbFetchRows('SELECT * FROM `bill_history` WHERE `bill_id` = ? ORDER BY 
                 <td>$allowed</td>
                 <td>$in</td>
                 <td>$out</td>
+                <td>$peakOut</td>
+                <td>$peakIn</td>
                 <td>$total_data</td>
                 <td>$rate_95th</td>
                 <td style=\"text-align: center;\">$overuse</td>

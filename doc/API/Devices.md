@@ -1053,6 +1053,7 @@ Input:
   - ipv6: search by IPv6 address (compressed or uncompressed)
   - location: search by location
   - hostname: search by hostname
+  - device_id: exact match by device-id
 - query: If searching by, then this will be used as the input.
 
 Example:
@@ -1100,6 +1101,32 @@ Output:
    "icon": null
   }
  ]
+}
+```
+
+### `maintenance_device`
+
+Set a device into maintenance mode.
+
+Route: `/api/v0/devices/:hostname/maintenance`
+
+Input (JSON):
+
+- notes: Some description for the Maintenance
+- duration: Duration of Maintenance in format H:m
+
+Example:
+
+```curl
+curl -X POST -d '{"notes":"A 2 hour Maintenance triggered via API","duration":"2:00"}' -H 'X-Auth-Token: YOURAPITOKENHERE' https://librenms.org/api/v0/localhost/maintenance
+```
+
+Output:
+
+```json
+{
+    "status": "ok",
+    "message": "Device localhost.localdomain (57) moved into maintenance mode for 2:00 h"
 }
 ```
 
@@ -1151,7 +1178,15 @@ Output:
 ```json
 {
     "status": "ok",
-    "message": "Device localhost.localdomain (57) has been added successfully"
+    "message": "Device localhost.localdomain (57) has been added successfully",
+    "devices": [
+        {
+            "device_id": "57",
+            "hostname": "localhost",
+            ...
+            "serial": null,
+            "icon": null
+        }
 }
 ```
 
@@ -1310,7 +1345,7 @@ search all oxidized device configs for a string.
 Route: `api/v0/oxidized/config/search/:searchstring`
 
   - searchstring is the specific string you would like to search for.
-  
+
 Input:
 
 -
@@ -1345,7 +1380,7 @@ Returns a specific device's config from oxidized.
 Route: `api/v0/oxidized/config/:device_name`
 
   - device_name is the full dns name of the device used when adding the device to librenms.
-  
+
 Input:
 
 -
@@ -1406,5 +1441,33 @@ Output:
 {
     "status": "ok",
     "message": "All device dependencies have been removed"
+}
+```
+
+### `list_parents_of_host`
+
+This is not a seperate API call.  Instead, you obtain the list of parents
+from `list_devices`.  See that entry point for more detailed information.
+
+Example:
+
+```curl
+curl -H 'X-Auth-Token: YOURAPITOKENHERE' 'http://librenms.org/api/v0/devices?type=device_id&query=34'
+```
+
+Output:
+
+```json
+{
+    "status": "ok",
+    "devices": [
+        {
+            ...
+            "dependency_parent_id": "98,99",
+            "dependency_parent_hostname": "HOSTNAME1,HOSTNAME2",
+            ...
+        }
+    ],
+    "count": 1
 }
 ```
