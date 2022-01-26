@@ -43,8 +43,8 @@ class InfluxDB2 extends BaseDatastore
         //$this->connection = $influx;
         $this->write_api = $influx;
 
-        #RH Need to figure out where this is called from and likely eliminate it, you can't get a token unless you already have a bucket
-        #KP This is called automatically by the "new InfluxDB2" line inside of createFromConfig()
+        //RH Need to figure out where this is called from and likely eliminate it, you can't get a token unless you already have a bucket
+        //KP This is called automatically by the "new InfluxDB2" line inside of createFromConfig()
         // check if the connection is healthy
         /*try {
             $influx->health();
@@ -52,7 +52,6 @@ class InfluxDB2 extends BaseDatastore
             Log::warning('InfluxDB2: Health check failed.');
         }*/
     }
-    
 
     public function getName()
     {
@@ -120,7 +119,7 @@ class InfluxDB2 extends BaseDatastore
                 'fields' => $tmp_fields
             ];
             */
-            
+
             $point = \InfluxDB2\Point::measurement($measurement);
             foreach ($tmp_tags as $k => $v) {
                 Log::debug('InfluxDB2.php: Adding tag with values ' . $k . ', ' . $v . ' to point with name ' . $measurement);
@@ -133,7 +132,7 @@ class InfluxDB2 extends BaseDatastore
 
             Log::debug('InfluxDB2.php: Attempting to write to API point with name ' . $measurement);
             $this->write_api->write($point);
-            #RH - Not sure what the next line does.  I'm guessing it writes to the Libre base datastore...
+            //RH - Not sure what the next line does.  I'm guessing it writes to the Libre base datastore...
             $this->recordStatistic($stat->end());
         } catch (\InfluxDB2\Exception $e) {
             Log::error('InfluxDB2 exception: ' . $e->getMessage());
@@ -148,7 +147,6 @@ class InfluxDB2 extends BaseDatastore
      */
     public static function createFromConfig()
     {
-
         Log::debug('InfluxDB2.php: Entering createFromConfig ');
 
         $url = Config::get('influxdb2.url', 'http://localhost:8086');
@@ -166,43 +164,48 @@ class InfluxDB2 extends BaseDatastore
         $udp_port = Config::get('influxdb2.udpPort', '');
 
         if ($transport == 'udp') {
-
             $client = new \InfluxDB2\Client([
-                "udpHost" => $udp_host,
-                "udpPort" => $udp_port,
-                "token" => $token,
-                "bucket" => $bucket,
-                "org" => $org,
-                "precision" => \InfluxDB2\Model\WritePrecision::S
+                'udpHost' => $udp_host,
+                'udpPort' => $udp_port,
+                'token' => $token,
+                'bucket' => $bucket,
+                'org' => $org,
+                'precision' => \InfluxDB2\Model\WritePrecision::S,
             ]);
-            
+
             $write_api = $client->createUdpWriter();
 
-            #RH - I'm not sure if the below is going to work.  Can the UDP writer support the point format?
-            # If it can't, we're going to need to put a bunch more logic in the data writer
-            if(!empty($tag01_name) && !empty($tag01_value)) $write_api->pointSettings->addDefaultTag($tag01_name, $tag01_value);
-            if(!empty($tag02_name) && !empty($tag02_value)) $write_api->pointSettings->addDefaultTag($tag02_name, $tag02_value);
-
+            //RH - I'm not sure if the below is going to work.  Can the UDP writer support the point format?
+            // If it can't, we're going to need to put a bunch more logic in the data writer
+            if (! empty($tag01_name) && ! empty($tag01_value)) {
+                $write_api->pointSettings->addDefaultTag($tag01_name, $tag01_value);
+            }
+            if (! empty($tag02_name) && ! empty($tag02_value)) {
+                $write_api->pointSettings->addDefaultTag($tag02_name, $tag02_value);
+            }
         } else {
-
             $client = new \InfluxDB2\Client([
-                "url" => $url,
-                "token" => $token,
-                "bucket" => $bucket,
-                "org" => $org,
-                "precision" => \InfluxDB2\Model\WritePrecision::S,
-                "timeout" => $timeout,
-                "verifySSL" => $verify_ssl
+                'url' => $url,
+                'token' => $token,
+                'bucket' => $bucket,
+                'org' => $org,
+                'precision' => \InfluxDB2\Model\WritePrecision::S,
+                'timeout' => $timeout,
+                'verifySSL' => $verify_ssl,
             ]);
 
             //Log::info('InfluxDB2.php: InfluxDB HEALTH CHECK result: ' . $client->health());
             $write_api = $client->createWriteApi();
-            if(!empty($tag01_name) && !empty($tag01_value)) $write_api->pointSettings->addDefaultTag($tag01_name, $tag01_value);
-            if(!empty($tag02_name) && !empty($tag02_value)) $write_api->pointSettings->addDefaultTag($tag02_name, $tag02_value);
+            if (! empty($tag01_name) && ! empty($tag01_value)) {
+                $write_api->pointSettings->addDefaultTag($tag01_name, $tag01_value);
+            }
+            if (! empty($tag02_name) && ! empty($tag02_value)) {
+                $write_api->pointSettings->addDefaultTag($tag02_name, $tag02_value);
+            }
         }
 
-        #RH - Not entirely sure what the return here does.  Is it needed?  I'm guessing that this was essentially a connection verification, 
-        # maybe we just need the health check and a catch if it fails
+        //RH - Not entirely sure what the return here does.  Is it needed?  I'm guessing that this was essentially a connection verification,
+        // maybe we just need the health check and a catch if it fails
         //return $client->selectDB($db);
         return $write_api;
     }

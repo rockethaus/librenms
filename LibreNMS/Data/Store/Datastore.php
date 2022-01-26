@@ -39,9 +39,13 @@ class Datastore
      */
     public static function init($options = [])
     {
+        //This array of options appears to be somewhat arbitrary.  When adding
+        //influxdb2 I chose j as it didn't seem to be occupied.
+        //Referenced by console.php and capture.inc.php
         $opts = [
             'r' => 'rrd.enable',
             'f' => 'influxdb.enable',
+            'j' => 'influxdb2.enable',
             'p' => 'prometheus.enable',
             'g' => 'graphite.enable',
         ];

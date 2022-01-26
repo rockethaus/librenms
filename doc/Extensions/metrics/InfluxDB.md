@@ -12,7 +12,7 @@ your own risk!
 
 # Requirements
 
-- InfluxDB >= 0.94
+- InfluxDB >= 0.94 to 1.7
 - Grafana
 - PHP 5.5 for InfluxDB-PHP
 

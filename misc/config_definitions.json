@@ -3567,15 +3567,15 @@
             "default": "http",
             "type": "select",
             "options": {
-                "http(s)": "HTTP",
-                "udp": "UDP"
+                "http": "HTTP(S)",
+                "udp": "Telegraf UDP"
             },
             "group": "poller",
             "section": "influxdb2",
             "order": 1
         },
         "influxdb2.url": {
-            "default": "127.0.0.1",
+            "default": "http://127.0.0.1:8086",
             "type": "text",
             "group": "poller",
             "section": "influxdb2",
@@ -3584,49 +3584,51 @@
                 "value": "url"
             }
         },
+        "influxdb2.udpHost": {
+            "default": "127.0.0.1",
+            "type": "text",
+            "group": "poller",
+            "section": "influxdb2",
+            "order": 3,
+            "validate": {
+                "value": "ip_or_hostname"
+            }
+        },
+        "influxdb2.udpPort": {
+            "default": "8094",
+            "type": "integer",
+            "group": "poller",
+            "section": "influxdb2",
+            "order": 4
+        },
         "influxdb2.bucket": {
             "type": "text",
             "group": "poller",
             "section": "influxdb2",
-            "order": 3
+            "order": 5
         },
         "influxdb2.org": {
             "type": "text",
             "group": "poller",
             "section": "influxdb2",
-            "order": 4
+            "order": 6
         },
         "influxdb2.token": {
             "type": "password",
             "group": "poller",
             "section": "influxdb2",
-            "order": 5
+            "order": 7
         },
         "influxdb2.timeout": {
             "default": 0,
             "type": "integer",
             "group": "poller",
             "section": "influxdb2",
-            "order": 6
+            "order": 8
         },
         "influxdb2.verifySSL": {
             "default": false,
             "type": "boolean",
-            "group": "poller",
-            "section": "influxdb2",
-            "order": 7
-        },
-        "influxdb2.udpHost": {
-            "type": "text",
-            "group": "poller",
-            "section": "influxdb2",
-            "order": 8,
-            "validate": {
-                "value": "ip_or_hostname"
-            }
-        },
-        "influxdb2.udpPort": {
-            "type": "integer",
             "group": "poller",
             "section": "influxdb2",
             "order": 9

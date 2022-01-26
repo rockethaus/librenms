@@ -75,7 +75,7 @@ class DatastoreServiceProvider extends ServiceProvider
 
     public function registerInflux2()
     {
-        #RH - Not really sure what this does and if it can co-exist with the original InfluxDB
+        //RH - Not really sure what this does and if it can co-exist with the original InfluxDB
         $this->app->singleton('InfluxDB2\WriteApi', function ($app) {
             return \LibreNMS\Data\Store\InfluxDB2::createFromConfig();
         });

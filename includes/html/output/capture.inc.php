@@ -31,7 +31,7 @@ $type = $_REQUEST['type'];
 
 switch ($type) {
     case 'poller':
-        $cmd = ['php', \LibreNMS\Config::get('install_dir') . '/poller.php', '-h', $hostname, '-r', '-f', '-d'];
+        $cmd = ['php', \LibreNMS\Config::get('install_dir') . '/poller.php', '-h', $hostname, '-r', '-f', '-d', '-j'];
         $filename = "poller-$hostname.txt";
         break;
     case 'snmpwalk':

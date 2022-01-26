@@ -111,6 +111,7 @@ nav:
           - Intro: Extensions/Metric-Storage.md
           - Graphite: Extensions/metrics/Graphite.md
           - InfluxDB: Extensions/metrics/InfluxDB.md
+          - InfluxDB2/Telegraf: Extensions/metrics/InfluxDB2.md
           - OpenTSDB: Extensions/metrics/OpenTSDB.md
           - Prometheus: Extensions/metrics/Prometheus.md
       - Smokeping: Extensions/Smokeping.md
